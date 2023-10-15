@@ -105,7 +105,7 @@ Para que possa testar as conexões com o banco de dados Oracle e o módulo Conex
 - Baixe a versão do [InstantClient](https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html) de acordo com a versão do Banco de Dados
 - Caso esteja utilizando uma distribuição Linux baseado em Debian, será necessário executar o comando a seguir para converter o arquivo .rpm para .deb.
   ```shell
-  sudo alien --scripts oracle-instantclient18.5-basic-18.5.0.0.0-3.x86_64.rpm
+  sudo alien --scripts oracle-instantclient-basic-21.11.0.0.0-1.x86_64.rpm
   ```
 - Descompacte o arquivo e será gerado um diretório em um diretório de fácil acesso.
 - Mova os diretórios lib e share para dentro do diretório do InstantClient
