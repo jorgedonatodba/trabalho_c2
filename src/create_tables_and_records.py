@@ -29,12 +29,13 @@ def generate_records(query:str, sep:str=';'):
 
 def run():
 
-    with open("../sql/create_tables_pedidos.sql") as f:
+    with open("../sql/create_tables_bancos.sql") as f:
         query_create = f.read()
 
     print("Creating tables...")
     create_tables(query=query_create)
     print("Tables successfully created!")
+    print("")
 
     with open("../sql/inserting_samples_records.sql") as f:
         query_generate_records = f.read()

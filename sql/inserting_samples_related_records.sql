@@ -1,184 +1,111 @@
 /*INSERE DADOS NA TABELA DE PEDIDOS E ITENS*/
 DECLARE
-  VCOD_PEDIDO NUMBER;
-  VCOD_ITEM_PEDIDO NUMBER;
-  VCOD_PRODUTO NUMBER;
+  VCPF NUMBER :=0;
+  VCOD_CONTA NUMBER :=0;
+  VCOD_MOV NUMBER :=0;
+  VDESC VARCHAR2(20);
+  VTIPOMOV VARCHAR2(1);
+  VTIPOCONT VARCHAR2(10);
+  VSALDO  NUMBER :=0;
+  VVALOR  NUMBER :=0;
+  VLIMITE  NUMBER :=0;
+  VID NUMBER :=0;
+  VDATAMOV DATE := SYSDATE - 2000;
+  VSALDOANT NUMBER :=0;
+  VSALDOATU NUMBER :=0;
+  VCONTASALDO NUMBER :=0;
 BEGIN
-  VCOD_PEDIDO := PRODUTOS_CODIGO_PRODUTO_SEQ.NEXTVAL;
+
+FOR Lcntr IN 1..10
+LOOP
+
+  VCOD_CONTA := seq_contas_numero.NEXTVAL;
+
+ SELECT ID
+    INTO VID
+    FROM CLIENTES
+  WHERE ID = (select round(dbms_random.value(1,8)) from dual);
+
+
+  SELECT round(dbms_random.value(1,1000),2) 
+    INTO VSALDO
+  from dual;
   
-  INSERT INTO PEDIDOS VALUES(VCOD_PEDIDO,    /*CODIGO_PEDIDO*/
-                             SYSDATE,        /*DATA_PEDIDO*/
-                             '43201234567',  /*CPF*/
-                             '01234567891234'/*CNPJ*/
+  SELECT round(dbms_random.value(1,1000),2) 
+    INTO VLIMITE
+  from dual;
+
+select CASE round(dbms_random.value(1,3))
+  WHEN 1 THEN 'corrente'
+  WHEN 2 THEN 'poupanca'
+  WHEN 3 THEN 'credito'
+END
+INTO VTIPOCONT
+ from dual; 
+
+  INSERT INTO CONTAS VALUES(VCOD_CONTA,  /*CODIGO_CONTA*/
+                             VTIPOCONT,  /*DATA_ABERTURA*/
+                             VSALDO,     /*CPF*/
+                             VLIMITE,    /*CODIGO_AGENCIA*/
+                             VID
                              );
+  COMMIT;
+END LOOP;
+
+FOR Lcntr IN 1..1000
+LOOP
+
+  VCOD_MOV := seq_movimentacoes_id.NEXTVAL;
   
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'IPHONE 11';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  111,              /*QUANTIDADE*/
-                                  3900,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-END;
---
-DECLARE
-  VCOD_PEDIDO NUMBER;
-  VCOD_ITEM_PEDIDO NUMBER;
-  VCOD_PRODUTO NUMBER;
-BEGIN
-  VCOD_PEDIDO := PRODUTOS_CODIGO_PRODUTO_SEQ.NEXTVAL;
-  
-  INSERT INTO PEDIDOS VALUES(VCOD_PEDIDO,    /*CODIGO_PEDIDO*/
-                             SYSDATE,        /*DATA_PEDIDO*/
-                             '01234567891',  /*CPF*/
-                             '01234567891234'/*CNPJ*/
-                             );
-  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'IPHONE 12';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  122,              /*QUANTIDADE*/
-                                  4500,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-END;
---
-DECLARE
-  VCOD_PEDIDO NUMBER;
-  VCOD_ITEM_PEDIDO NUMBER;
-  VCOD_PRODUTO NUMBER;
-BEGIN
-  VCOD_PEDIDO := PRODUTOS_CODIGO_PRODUTO_SEQ.NEXTVAL;
-  
-  INSERT INTO PEDIDOS VALUES(VCOD_PEDIDO,    /*CODIGO_PEDIDO*/
-                             SYSDATE,        /*DATA_PEDIDO*/
-                             '87654320123',  /*CPF*/
-                             '01234567891234'/*CNPJ*/
-                             );
-  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'IPHONE 13';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  131,              /*QUANTIDADE*/
-                                  6500,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-                                  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'SAMGUNG GALAXY S22';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  100,              /*QUANTIDADE*/
-                                  5500,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-END;
---
-DECLARE
-  VCOD_PEDIDO NUMBER;
-  VCOD_ITEM_PEDIDO NUMBER;
-  VCOD_PRODUTO NUMBER;
-BEGIN
-  VCOD_PEDIDO := PRODUTOS_CODIGO_PRODUTO_SEQ.NEXTVAL;
-  
-  INSERT INTO PEDIDOS VALUES(VCOD_PEDIDO,    /*CODIGO_PEDIDO*/
-                             SYSDATE,        /*DATA_PEDIDO*/
-                             '32012345678',  /*CPF*/
-                             '00001234567891'/*CNPJ*/
-                             );
-  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'IPHONE 11';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  111,              /*QUANTIDADE*/
-                                  3750,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-                                  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'MOTOROLA G50';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  78,              /*QUANTIDADE*/
-                                  2900,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-                                  
-END;
---
-DECLARE
-  VCOD_PEDIDO NUMBER;
-  VCOD_ITEM_PEDIDO NUMBER;
-  VCOD_PRODUTO NUMBER;
-BEGIN
-  VCOD_PEDIDO := PRODUTOS_CODIGO_PRODUTO_SEQ.NEXTVAL;
-  
-  INSERT INTO PEDIDOS VALUES(VCOD_PEDIDO,    /*CODIGO_PEDIDO*/
-                             SYSDATE,        /*DATA_PEDIDO*/
-                             '76543201234',  /*CPF*/
-                             '00012345678912'/*CNPJ*/
-                             );
-  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'IPHONE 14';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  50,              /*QUANTIDADE*/
-                                  8000,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-                                  
-  VCOD_ITEM_PEDIDO := ITENS_PEDIDO_CODIGO_ITEM_SEQ.NEXTVAL;
-  
-  SELECT CODIGO_PRODUTO
-    INTO VCOD_PRODUTO
-    FROM PRODUTOS
-   WHERE DESCRICAO_PRODUTO = 'MOTOROLA G50';
-  
-  INSERT INTO ITENS_PEDIDO VALUES(VCOD_ITEM_PEDIDO, /*CODIGO_ITEM_PEDIDO*/
-                                  30,              /*QUANTIDADE*/
-                                  2900,             /*VALOR*/
-                                  VCOD_PEDIDO,      /*CODIGO_PEDIDO*/
-                                  VCOD_PRODUTO      /*CODIGO_PRODUTO*/
-                                  );
-                                  
+  VDATAMOV := VDATAMOV + 1/24;
+
+  SELECT NUMERO,SALDO,LIMITE
+    INTO VCOD_CONTA,VCONTASALDO,VLIMITE
+    FROM CONTAS
+  WHERE NUMERO = (select round(dbms_random.value(1,10)) from dual);
+
+  select CASE round(dbms_random.value(1,2))
+    WHEN 1 THEN 'C'
+    WHEN 2 THEN 'D'
+  END
+  INTO VTIPOMOV
+  from dual;
+
+  select CASE VTIPOMOV
+    WHEN 'C' THEN 'CREDITO EM CONTA'
+    WHEN 'D' THEN 'DÉBITO EM CONTA'
+  END
+  INTO VDESC
+  from dual;
+
+  SELECT round(dbms_random.value(1,1000),2) 
+    INTO VVALOR
+  from dual;
+
+  IF VTIPOMOV = 'D' THEN
+    VSALDOANT := VCONTASALDO;
+    VSALDOATU := VCONTASALDO - VVALOR;
+    VVALOR := VVALOR*-1;
+  ELSIF VTIPOMOV = 'C' THEN
+    VSALDOANT := VCONTASALDO;
+    VSALDOATU := VCONTASALDO + VVALOR;
+  END IF;
+
+  IF (VLIMITE*-1) <= VSALDOATU THEN
+
+    UPDATE CONTAS
+    SET saldo = VSALDOATU
+    WHERE numero=VCOD_CONTA;
+
+    INSERT INTO MOVIMENTACOES VALUES(VCOD_MOV,   /*CODIGO_MOVIMENTACAO*/
+                                    VDATAMOV,    /*VALOR*/
+                                    VDESC,  /*CODIGO_CONTA*/
+                                    VVALOR,
+                                    VSALDOANT,
+                                    VSALDOATU,
+                                    VCOD_CONTA     /*TIPO_MOV*/
+                                    );
+    COMMIT;
+END IF;
+  END LOOP;
 END;
