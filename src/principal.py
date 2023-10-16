@@ -14,11 +14,11 @@ ctrl_cliente = Controller_Cliente()
 def reports(opcao_relatorio:int=0):
 
     if opcao_relatorio == 1:
-        relatorio.get_relatorio_pedidos_por_fornecedor()            
+        relatorio.get_relatorio_clientes()            
     elif opcao_relatorio == 2:
-        relatorio.get_relatorio_pedidos()
+        relatorio.get_relatorio_contas()
     elif opcao_relatorio == 3:
-        relatorio.get_relatorio_produtos()
+        relatorio.get_relatorio_movimentacoes()
     elif opcao_relatorio == 4:
         relatorio.get_relatorio_clientes()
     elif opcao_relatorio == 5:

@@ -1,0 +1,3 @@
+select C.NUMERO, C.TIPO, C.SALDO, C.LIMITE, C.ID_CLIENTE
+  from CONTAS c
+ order by c.NUMERO
