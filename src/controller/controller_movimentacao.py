@@ -1,18 +1,13 @@
 from model.movimentacoes import Movimentacao
-from model.clientes import Cliente
-from controller.controller_cliente import Controller_Cliente
 from model.contas import Contas
 from controller.controller_conta import Controller_Conta
-from controller.controller_movimentacao import Controller_Movimentacao
 from conexion.oracle_queries import OracleQueries
 
-class Controller_Item_Pedido:
+class Controller_Movimentacao:
     def __init__(self):
-        self.ctrl_produto = Controller_Produto()
-        self.ctrl_pedido = Controller_Pedido()
-        self.ctrl_fornecedor = Controller_Fornecedor()
+        self.ctrl_conta = Controller_Conta()
         
-    def inserir_item_pedido(self) -> ItemPedido:
+    def inserir_movimentacao(self) -> Movimentacao:
         ''' Ref.: https://cx-oracle.readthedocs.io/en/latest/user_guide/plsql_execution.html#anonymous-pl-sql-blocks'''
         
         # Cria uma nova conexão com o banco
@@ -140,27 +135,14 @@ class Controller_Item_Pedido:
         df_pedido = oracle.sqlToDataFrame(f"select codigo_item_pedido, quantidade, valor_unitario, codigo_pedido, codigo_produto from itens_pedido where codigo_item_pedido = {codigo}")
         return df_pedido.empty
 
-    def listar_pedidos(self, oracle:OracleQueries, need_connect:bool=False):
+    def listar_contas(self, oracle:OracleQueries, need_connect:bool=False):
         query = """
-                select p.codigo_pedido
-                    , p.data_pedido
-                    , c.nome as cliente
-                    , nvl(f.nome_fantasia, f.razao_social) as empresa
-                    , i.codigo_item_pedido as item_pedido
-                    , prd.descricao_produto as produto
-                    , i.quantidade
-                    , i.valor_unitario
-                    , (i.quantidade * i.valor_unitario) as valor_total
-                from pedidos p
-                inner join clientes c
-                on p.cpf = c.cpf
-                inner join fornecedores f
-                on p.cnpj = f.cnpj
-                left join itens_pedido i
-                on p.codigo_pedido = i.codigo_pedido
-                left join produtos prd
-                on i.codigo_produto = prd.codigo_produto
-                order by c.nome
+                select c.numero
+                ,c.tipo
+                ,c.saldo
+                ,c.limite
+                from contas c
+                order by c.numero
                 """
         if need_connect:
             oracle.connect()
