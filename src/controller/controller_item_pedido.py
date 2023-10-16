@@ -1,9 +1,8 @@
-from model.itens_pedido import ItemPedido
+from model.movimentacoes import Movimentacao
 from model.produtos import Produto
 from controller.controller_produto import Controller_Produto
-from model.pedidos import Pedido
+from model.contas import Pedido
 from controller.controller_pedido import Controller_Pedido
-from model.fornecedores import Fornecedor
 from controller.controller_fornecedor import Controller_Fornecedor
 from conexion.oracle_queries import OracleQueries
 

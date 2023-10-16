@@ -1,5 +1,5 @@
 from pydoc import cli
-from model.pedidos import Pedido
+from model.contas import Pedido
 from model.clientes import Cliente
 from controller.controller_cliente import Controller_Cliente
 from model.fornecedores import Fornecedor
