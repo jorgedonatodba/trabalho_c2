@@ -6,8 +6,8 @@ CREATE TABLE FORNECEDORES (
 );
 
 /*
-drop user c##ivie cascade;
 alter session set CONTAINER=FREEPDB1;
+drop user ivie cascade;
 create user ivie identified by ivie;
 grant dba to ivie;
 */

@@ -29,13 +29,14 @@ CREATE TABLE clientes (
 );
 
 -- Deletando a sequencia de contas, seq_contas_numero, se existir
-DROP SEQUENCE seq_contas_numero;
+DROP SEQUENCE seq_contas_id;
 
 -- Criando a sequência para a tabela de contas
-CREATE SEQUENCE seq_contas_numero;
+CREATE SEQUENCE seq_contas_id;
 
 -- Criando a tabela de contas
 CREATE TABLE contas (
+  id NUMBER NOT NULL,
   numero NUMBER NOT NULL,
   tipo VARCHAR2(10) CHECK (tipo IN ('corrente', 'poupanca', 'credito')),
   saldo NUMBER(10,2) NOT NULL,

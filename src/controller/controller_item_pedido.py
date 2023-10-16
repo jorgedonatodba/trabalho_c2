@@ -1,9 +1,9 @@
 from model.movimentacoes import Movimentacao
-from model.produtos import Produto
-from controller.controller_produto import Controller_Produto
-from model.contas import Pedido
-from controller.controller_pedido import Controller_Pedido
-from controller.controller_fornecedor import Controller_Fornecedor
+from model.clientes import Cliente
+from controller.controller_cliente import Controller_Cliente
+from model.contas import Contas
+from controller.controller_conta import Controller_Conta
+from controller.controller_movimentacao import Controller_Movimentacao
 from conexion.oracle_queries import OracleQueries
 
 class Controller_Item_Pedido:

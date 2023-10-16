@@ -3,19 +3,24 @@ from model.clientes import Cliente
 ##from model.fornecedores import Fornecedor
 
 class Conta:
-    def __init__(self, 
+    def __init__(self,
+                 id:int=None, 
                  numero:int=None,
                  tipo:str=None,
                  saldo:float=None,
                  limite:float=None,
                  cliente:Cliente= None
                  ):
+        self.set_id(id)
         self.set_numero(numero)
         self.set_tipo(tipo)
         self.set_saldo(saldo)
         self.set_limite(limite)
         self.set_cliente(cliente)
     
+    def set_id(self, id:int):
+        self.id = id
+
     def set_numero(self, numero:int):
         self.numero = numero
 
@@ -30,6 +35,9 @@ class Conta:
 
     def set_cliente(self, cliente:Cliente):
         self.cliente = cliente
+
+    def get_id(self) -> int:
+        return self.id
 
     def get_numero(self) -> int:
         return self.numero
@@ -47,4 +55,4 @@ class Conta:
         return self.cliente
     
     def to_string(self) -> str:
-        return f"Pedido n: {self.get_numero()} | Tipo Conta: {self.get_tipo()} | Saldo: {self.get_saldo()} | Limite Conta: {self.get_limite()} | Cliente: {self.get_cliente().get_nome()}"
+        return f"Conta n: {self.get_numero()} | Tipo Conta: {self.get_tipo()} | Saldo: {self.get_saldo()} | Limite Conta: {self.get_limite()}"
