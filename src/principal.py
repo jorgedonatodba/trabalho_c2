@@ -20,11 +20,9 @@ def reports(opcao_relatorio:int=0):
     elif opcao_relatorio == 3:
         relatorio.get_relatorio_movimentacoes()
     elif opcao_relatorio == 4:
-        relatorio.get_relatorio_clientes()
+        relatorio.get_relatorio_tipo_de_conta_por_cliente()
     elif opcao_relatorio == 5:
-        relatorio.get_relatorio_fornecedores()
-    elif opcao_relatorio == 6:
-        relatorio.get_relatorio_itens_pedidos()
+        relatorio.get_relatorio_saldo_qtd_mov_conta()
 
 def inserir(opcao_inserir:int=0):
 

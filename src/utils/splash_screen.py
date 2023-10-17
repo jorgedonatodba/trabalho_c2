@@ -11,7 +11,12 @@ class SplashScreen:
         # Consultas de contagem de registros - fim
 
         # Nome(s) do(s) criador(es)
-        self.created_by = "Ivie Alvarino Faé de Oliveira e Silva"
+        self.created_by = '''
+        #        ANTHONY MAHYHAKER SILVA
+        #        CIRO MASSARIOL DE ARAUJO
+        #        IVIE ALVARINO FAÉ DE OLIVEIRA E SILVA
+        #        PEDRO HENRIQUE SOSSAI CAMATA''' 
+
         self.professor = "Prof. M.Sc. Howard Roatti"
         self.disciplina = "Banco de Dados"
         self.semestre = "2023/2"
@@ -40,7 +45,7 @@ class SplashScreen:
     def get_updated_screen(self):
         return f"""
         ########################################################
-        #                   SISTEMA DE VENDAS                     
+        #              SISTEMA DE GESTÃO BANCÁRIA                     
         #                                                         
         #  TOTAL DE REGISTROS:                                    
         #      1 - CLIENTES:         {str(self.get_total_clientes()).rjust(5)}
