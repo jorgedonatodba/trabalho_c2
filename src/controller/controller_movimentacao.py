@@ -14,9 +14,9 @@ class Controller_Movimentacao:
         oracle = OracleQueries()
         
         # Lista os pedido existentes para inserir no item de pedido
-        self.listar_pedidos(oracle, need_connect=True)
-        codigo_pedido = str(input("Digite o número do Pedido: "))
-        pedido = self.valida_pedido(oracle, codigo_pedido)
+        self.listar_contas(oracle, need_connect=True)
+        lnumero = int(input("Digite o número da Conta: "))
+        pedido = self.valida_pedido(oracle, lnumero)
         if pedido == None:
             return None
 
@@ -159,9 +159,9 @@ class Controller_Movimentacao:
             oracle.connect()
         print(oracle.sqlToDataFrame(query))
 
-    def valida_pedido(self, oracle:OracleQueries, codigo_pedido:int=None) -> Pedido:
-        if self.ctrl_pedido.verifica_existencia_pedido(oracle, codigo_pedido):
-            print(f"O pedido {codigo_pedido} informado não existe na base.")
+    def valida_conta(self, oracle:OracleQueries, pnumero:int=None) -> Contas:
+        if self.ctrl_conta.verifica_existencia_conta(oracle, pnumero):
+            print(f"A Conta {pnumero} informada não existe na base.")
             return None
         else:
             oracle.connect()
