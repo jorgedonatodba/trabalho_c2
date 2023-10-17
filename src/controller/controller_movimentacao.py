@@ -2,7 +2,7 @@ from model.movimentacoes import Movimentacao
 from model.contas import Conta
 from controller.controller_conta import Controller_Conta
 from conexion.oracle_queries import OracleQueries
-from datetime import date
+import datetime
 
 class Controller_Movimentacao:
     def __init__(self):
@@ -21,7 +21,10 @@ class Controller_Movimentacao:
         if nconta == None:
             return None
 
-        datamov = date
+        '''datamov = datetime.datetime.now()
+        x = datamov.strftime("%d/%m/%Y %H:%M:%S")
+        print(x) '''
+
         tipomov = input("Informar o Tipo da Movimemtação (C)rédito ou (D)ébito: ")
 
         vvalor = float(input("Informar o Valor da Movimentação: "))
@@ -54,12 +57,15 @@ class Controller_Movimentacao:
             oracle = OracleQueries(can_write=True)
             oracle.connect()
             # Insere e persiste o novo saldo e movimento
-            oracle.write(f"update contas set saldo = {vsaldoatu} where id = {vcontaid}",False)
-            oracle.write(f"insert into movimentacoes values (seq_movimentacoes_id.nextval, '{datamov}', '{vdesc}', '{vvalor}', '{vsaldoant}', '{vsaldoatu}', '{vcontaid}')")
-            # Recupera os dados do novo conta criado transformando em um DataFrame
-            df_mov = oracle.sqlToDataFrame(f"select '{vnumeroconta}' as num,id, data, descricao, valor, saldo_anterior, saldo_atual from movimentacoes where id = seq_movimentacoes_id.curval")
+            df_idmov = oracle.sqlToDataFrame(f"select seq_movimentacoes_id.nextval as id from dual")
             # Cria um novo objeto conta
-            nova_mov = Movimentacao(df_mov.num.values[0], df_mov.data.values[0], df_mov.descricao.values[0], df_mov.valor.values[0], df_mov.saldo_anterior.values[0],df_mov.saldo_atual.values[0])
+            idmov = df_idmov.id.values[0]
+            oracle.write(f"update contas set saldo = {vsaldoatu} where id = {vcontaid}",False)
+            oracle.write(f"insert into movimentacoes values ({idmov}, sysdate, '{vdesc}', '{vvalor}', '{vsaldoant}', '{vsaldoatu}', '{vcontaid}')")
+            # Recupera os dados do novo conta criado transformando em um DataFrame
+            df_mov = oracle.sqlToDataFrame(f"select '{vnumeroconta}' as num,id, data, descricao, valor, saldo_anterior, saldo_atual from movimentacoes where id = {idmov}")
+            # Cria um novo objeto conta
+            nova_mov = Movimentacao(df_mov.id.values[0], df_mov.data.values[0], df_mov.descricao.values[0], df_mov.valor.values[0], df_mov.saldo_anterior.values[0],df_mov.saldo_atual.values[0],nconta)
             # Exibe os atributos do novo conta
             print(nova_mov.to_string())
             # Retorna o objeto novo_conta para utilização posterior, caso necessário

@@ -39,3 +39,5 @@ select * from c##ivie.clientes;
 
 
   select id,  numero,  tipo,  saldo,  limite,  id_cliente from contas 
+
+
