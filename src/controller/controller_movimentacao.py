@@ -20,6 +20,68 @@ class Controller_Movimentacao:
         if nidconta == None:
             return None
 
+        '''
+
+
+
+        VDATAMOV DATE := SYSDATE - 2000;
+
+        FOR Lcntr IN 1..1000
+LOOP
+
+  VCOD_MOV := seq_movimentacoes_id.NEXTVAL;
+  
+  VDATAMOV := VDATAMOV + 1/24;
+
+  SELECT NUMERO,SALDO,LIMITE
+    INTO VCOD_CONTA,VCONTASALDO,VLIMITE
+    FROM CONTAS
+  WHERE NUMERO = (select round(dbms_random.value(1,10)) from dual);
+
+  select CASE round(dbms_random.value(1,2))
+    WHEN 1 THEN 'C'
+    WHEN 2 THEN 'D'
+  END
+  INTO VTIPOMOV
+  from dual;
+
+  select CASE VTIPOMOV
+    WHEN 'C' THEN 'CREDITO EM CONTA'
+    WHEN 'D' THEN 'DÉBITO EM CONTA'
+  END
+  INTO VDESC
+  from dual;
+
+  SELECT round(dbms_random.value(1,1000),2) 
+    INTO VVALOR
+  from dual;
+
+  IF VTIPOMOV = 'D' THEN
+    VSALDOANT := VCONTASALDO;
+    VSALDOATU := VCONTASALDO - VVALOR;
+    VVALOR := VVALOR*-1;
+  ELSIF VTIPOMOV = 'C' THEN
+    VSALDOANT := VCONTASALDO;
+    VSALDOATU := VCONTASALDO + VVALOR;
+  END IF;
+
+  IF (VLIMITE*-1) <= VSALDOATU THEN
+
+    UPDATE CONTAS
+    SET saldo = VSALDOATU
+    WHERE numero=VCOD_CONTA;
+
+    INSERT INTO MOVIMENTACOES VALUES(VCOD_MOV,   /*CODIGO_MOVIMENTACAO*/
+                                    VDATAMOV,    /*VALOR*/
+                                    VDESC,  /*CODIGO_CONTA*/
+                                    VVALOR,
+                                    VSALDOANT,
+                                    VSALDOATU,
+                                    VCOD_CONTA     /*TIPO_MOV*/
+                                    );
+    COMMIT;
+    '''
+
         # Recupera o código do novo item de pedido
         codigo_movimentacao = output_value.getvalue()
         # Persiste (confirma) as alterações
@@ -106,8 +168,8 @@ class Controller_Movimentacao:
 
     '''def verifica_existencia_movimentacao(self, oracle:OracleQueries, codigo:int=None) -> bool:
         # Recupera os dados do novo pedido criado transformando em um DataFrame
-        df_pedido = oracle.sqlToDataFrame(f"select codigo_movimentacao, quantidade, valor_unitario, codigo_pedido, codigo_produto from itens_pedido where codigo_movimentacao = {codigo}")
-        return df_pedido.empty'''
+        df_conta = oracle.sqlToDataFrame(f"select codigo_movimentacao, quantidade, valor_unitario, codigo_pedido, codigo_produto from itens_pedido where codigo_movimentacao = {codigo}")
+        return df_conta.empty'''
 
     def listar_contas(self, oracle:OracleQueries, need_connect:bool=False):
         query = """
@@ -128,8 +190,8 @@ class Controller_Movimentacao:
             return None
         else:
             oracle.connect()
-            # Recupera os dados do novo cliente criado transformando em um DataFrame
-            df_pedido = oracle.sqlToDataFrame(f"select codigo_pedido, data_pedido, cpf, cnpj from pedidos where codigo_pedido = {codigo_pedido}")
+            # Recupera os dados da conta para o novo movimento criado transformando em um DataFrame
+            df_conta = oracle.sqlToDataFrame(f"select id,  numero,  tipo,  saldo,  limite,  id_cliente from contas where numero = {pnumero}")
             # Cria um novo objeto cliente
-            pedido = Pedido(df_pedido.codigo_pedido.values[0], df_pedido.data_pedido.values[0], cliente, fornecedor)
-            return pedido
+            nconta = Contas(df_conta.id.values[0], df_conta.numero.values[0], df_conta.tipo.values[0], df_conta.saldo.values[0], df_conta.limite.values[0], df_conta.id_cliente.values[0])
+            return nconta
