@@ -34,46 +34,30 @@ def inserir(opcao_inserir:int=0):
         nova_conta = ctrl_conta.inserir_conta()
     elif opcao_inserir == 3:
         nova_movimentacao = ctrl_movimentacao.inserir_movimentacao()
-    '''elif opcao_inserir == 4:
-        novo_pedido = ctrl_pedido.inserir_pedido()
-    elif opcao_inserir == 5:
-        novo_item_pedido = ctrl_item_pedido.inserir_item_pedido()'''
 
 def atualizar(opcao_atualizar:int=0):
 
     if opcao_atualizar == 1:
-        ##relatorio.get_relatorio_clientes()
+        relatorio.get_relatorio_clientes()
         cliente_atualizado = ctrl_cliente.atualizar_cliente()
     elif opcao_atualizar == 2:
-        ##relatorio.get_relatorio_clientes()
+        relatorio.get_relatorio_clientescontas()
         conta_atualizada = ctrl_conta.atualizar_conta()
-    '''elif opcao_atualizar == 3:
-        relatorio.get_relatorio_fornecedores()
-        fornecedor_atualizado = ctrl_fornecedor.atualizar_fornecedor()
-    elif opcao_atualizar == 4:
-        relatorio.get_relatorio_pedidos()
-        pedido_atualizado = ctrl_pedido.atualizar_pedido()
-    elif opcao_atualizar == 5:
-        relatorio.get_relatorio_itens_pedidos()
-        item_pedido_atualizado = ctrl_item_pedido.atualizar_item_pedido()'''
+    elif opcao_atualizar == 3:
+        relatorio.get_relatorio_movimentacoes()
+        mov_atualizado = ctrl_movimentacao.atualizar_movimentacao()
 
 def excluir(opcao_excluir:int=0):
 
     if opcao_excluir == 1:
-        #relatorio.get_relatorio_clientes()
+        relatorio.get_relatorio_clientes()
         ctrl_cliente.excluir_cliente()
     elif opcao_excluir == 2:                
-        ##relatorio.get_relatorio_contas()
+        relatorio.get_relatorio_contas()
         ctrl_conta.excluir_conta()
-    '''elif opcao_excluir == 3:                
+    elif opcao_excluir == 3:                
         relatorio.get_relatorio_fornecedores()
-        ctrl_fornecedor.excluir_fornecedor()
-    elif opcao_excluir == 4:                
-        relatorio.get_relatorio_pedidos()
-        ctrl_pedido.excluir_pedido()
-    elif opcao_excluir == 5:
-        relatorio.get_relatorio_itens_pedidos()
-        ctrl_item_pedido.excluir_item_pedido()'''
+        ctrl_movimentacao.excluir_movimentacao()
 
 def run():
     print(tela_inicial.get_updated_screen())
@@ -87,7 +71,7 @@ def run():
         if opcao == 1: # Relatórios
             
             print(config.MENU_RELATORIOS)
-            opcao_relatorio = int(input("Escolha uma opção [0-6]: "))
+            opcao_relatorio = int(input("Escolha uma opção [0-5]: "))
             config.clear_console(1)
 
             reports(opcao_relatorio)
