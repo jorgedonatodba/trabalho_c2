@@ -3,13 +3,13 @@ from utils.splash_screen import SplashScreen
 from reports.relatorios import Relatorio
 from controller.controller_cliente import Controller_Cliente
 from controller.controller_conta import Controller_Conta
-##from controller.controller_movimentacao import Controller_Movimentacao
+from controller.controller_movimentacao import Controller_Movimentacao
 
 tela_inicial = SplashScreen()
 relatorio = Relatorio()
 ctrl_conta= Controller_Conta()
 ctrl_cliente = Controller_Cliente()
-##ctrl_movimentacao = Controller_Movimentacao()
+ctrl_movimentacao = Controller_Movimentacao()
 
 def reports(opcao_relatorio:int=0):
 
@@ -32,9 +32,9 @@ def inserir(opcao_inserir:int=0):
         novo_cliente = ctrl_cliente.inserir_cliente()
     elif opcao_inserir == 2:
         nova_conta = ctrl_conta.inserir_conta()
-    '''elif opcao_inserir == 3:
-        novo_fornecedor = ctrl_fornecedor.inserir_fornecedor()
-    elif opcao_inserir == 4:
+    elif opcao_inserir == 3:
+        nova_movimentacao = ctrl_movimentacao.inserir_movimentacao()
+    '''elif opcao_inserir == 4:
         novo_pedido = ctrl_pedido.inserir_pedido()
     elif opcao_inserir == 5:
         novo_item_pedido = ctrl_item_pedido.inserir_item_pedido()'''

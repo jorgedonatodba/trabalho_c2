@@ -1,7 +1,8 @@
 from model.movimentacoes import Movimentacao
-from model.contas import Contas
+from model.contas import Conta
 from controller.controller_conta import Controller_Conta
 from conexion.oracle_queries import OracleQueries
+from datetime import date
 
 class Controller_Movimentacao:
     def __init__(self):
@@ -16,73 +17,58 @@ class Controller_Movimentacao:
         # Lista os pedido existentes para inserir no item de pedido
         self.listar_contas(oracle, need_connect=True)
         lnumero = int(input("Digite o número da Conta: "))
-        nidconta = self.valida_conta(oracle, lnumero)
-        if nidconta == None:
+        nconta = self.valida_conta(oracle, lnumero)
+        if nconta == None:
             return None
 
-        '''
+        datamov = date
+        tipomov = input("Informar o Tipo da Movimemtação (C)rédito ou (D)ébito: ")
 
+        vvalor = float(input("Informar o Valor da Movimentação: "))
 
+        if (vvalor.__lt__(0)):
+            print("Valor inválido - não pode ser negativo")
+            return None
 
-        VDATAMOV DATE := SYSDATE - 2000;
+        vcontaid = nconta.get_id()
+        vcontasaldo = nconta.get_saldo()
+        vcontalimite = nconta.get_limite()
+        vnumeroconta = nconta.get_numero()
+        vsaldoatu = 0
 
-        FOR Lcntr IN 1..1000
-LOOP
+        if tipomov.upper() == 'C':
+            vdesc = 'CREDITO EM CONTA'
+            vsaldoant = vcontasaldo
+            vsaldoatu = vcontasaldo + vvalor
+        elif tipomov.upper() == 'D':
+            vdesc = 'DÉBITO EM CONTA'
+            vsaldoant = vcontasaldo
+            vsaldoatu = vcontasaldo - vvalor
+            vvalor = vvalor*-1
+        else:
+            print("Favor, informar (C)rédito ou (D)ébito.")
+            return None
 
-  VCOD_MOV := seq_movimentacoes_id.NEXTVAL;
-  
-  VDATAMOV := VDATAMOV + 1/24;
+        if (vcontalimite*-1) <= vsaldoatu:
+            # Cria uma nova conexão com o banco que permite alteração
+            oracle = OracleQueries(can_write=True)
+            oracle.connect()
+            # Insere e persiste o novo saldo e movimento
+            oracle.write(f"update contas set saldo = {vsaldoatu} where id = {vcontaid}",False)
+            oracle.write(f"insert into movimentacoes values (seq_movimentacoes_id.nextval, '{datamov}', '{vdesc}', '{vvalor}', '{vsaldoant}', '{vsaldoatu}', '{vcontaid}')")
+            # Recupera os dados do novo conta criado transformando em um DataFrame
+            df_mov = oracle.sqlToDataFrame(f"select '{vnumeroconta}' as num,id, data, descricao, valor, saldo_anterior, saldo_atual from movimentacoes where id = seq_movimentacoes_id.curval")
+            # Cria um novo objeto conta
+            nova_mov = Movimentacao(df_mov.num.values[0], df_mov.data.values[0], df_mov.descricao.values[0], df_mov.valor.values[0], df_mov.saldo_anterior.values[0],df_mov.saldo_atual.values[0])
+            # Exibe os atributos do novo conta
+            print(nova_mov.to_string())
+            # Retorna o objeto novo_conta para utilização posterior, caso necessário
+            return nova_mov
+        else:
+            print(f"A Movimentação não pode ser executada - Conta {vnumeroconta} - Limite de {vcontalimite} excedido.")
+            return None
 
-  SELECT NUMERO,SALDO,LIMITE
-    INTO VCOD_CONTA,VCONTASALDO,VLIMITE
-    FROM CONTAS
-  WHERE NUMERO = (select round(dbms_random.value(1,10)) from dual);
-
-  select CASE round(dbms_random.value(1,2))
-    WHEN 1 THEN 'C'
-    WHEN 2 THEN 'D'
-  END
-  INTO VTIPOMOV
-  from dual;
-
-  select CASE VTIPOMOV
-    WHEN 'C' THEN 'CREDITO EM CONTA'
-    WHEN 'D' THEN 'DÉBITO EM CONTA'
-  END
-  INTO VDESC
-  from dual;
-
-  SELECT round(dbms_random.value(1,1000),2) 
-    INTO VVALOR
-  from dual;
-
-  IF VTIPOMOV = 'D' THEN
-    VSALDOANT := VCONTASALDO;
-    VSALDOATU := VCONTASALDO - VVALOR;
-    VVALOR := VVALOR*-1;
-  ELSIF VTIPOMOV = 'C' THEN
-    VSALDOANT := VCONTASALDO;
-    VSALDOATU := VCONTASALDO + VVALOR;
-  END IF;
-
-  IF (VLIMITE*-1) <= VSALDOATU THEN
-
-    UPDATE CONTAS
-    SET saldo = VSALDOATU
-    WHERE numero=VCOD_CONTA;
-
-    INSERT INTO MOVIMENTACOES VALUES(VCOD_MOV,   /*CODIGO_MOVIMENTACAO*/
-                                    VDATAMOV,    /*VALOR*/
-                                    VDESC,  /*CODIGO_CONTA*/
-                                    VVALOR,
-                                    VSALDOANT,
-                                    VSALDOATU,
-                                    VCOD_CONTA     /*TIPO_MOV*/
-                                    );
-    COMMIT;
-    '''
-
-        # Recupera o código do novo item de pedido
+        '''# Recupera o código do novo item de pedido
         codigo_movimentacao = output_value.getvalue()
         # Persiste (confirma) as alterações
         oracle.conn.commit()
@@ -166,7 +152,7 @@ LOOP
         else:
             print(f"O código {codigo_movimentacao} não existe.")
 
-    '''def verifica_existencia_movimentacao(self, oracle:OracleQueries, codigo:int=None) -> bool:
+    def verifica_existencia_movimentacao(self, oracle:OracleQueries, codigo:int=None) -> bool:
         # Recupera os dados do novo pedido criado transformando em um DataFrame
         df_conta = oracle.sqlToDataFrame(f"select codigo_movimentacao, quantidade, valor_unitario, codigo_pedido, codigo_produto from itens_pedido where codigo_movimentacao = {codigo}")
         return df_conta.empty'''
@@ -184,7 +170,7 @@ LOOP
             oracle.connect()
         print(oracle.sqlToDataFrame(query))
 
-    def valida_conta(self, oracle:OracleQueries, pnumero:int=None) -> Contas:
+    def valida_conta(self, oracle:OracleQueries, pnumero:int=None) -> Conta:
         if self.ctrl_conta.verifica_existencia_conta(oracle, pnumero):
             print(f"A Conta {pnumero} informada não existe na base.")
             return None
@@ -193,5 +179,5 @@ LOOP
             # Recupera os dados da conta para o novo movimento criado transformando em um DataFrame
             df_conta = oracle.sqlToDataFrame(f"select id,  numero,  tipo,  saldo,  limite,  id_cliente from contas where numero = {pnumero}")
             # Cria um novo objeto cliente
-            nconta = Contas(df_conta.id.values[0], df_conta.numero.values[0], df_conta.tipo.values[0], df_conta.saldo.values[0], df_conta.limite.values[0], df_conta.id_cliente.values[0])
+            nconta = Conta(df_conta.id.values[0], df_conta.numero.values[0], df_conta.tipo.values[0], df_conta.saldo.values[0], df_conta.limite.values[0], df_conta.id_cliente.values[0])
             return nconta
