@@ -6,12 +6,14 @@ class Cliente:
                  endereco:str=None,
                  telefone:str=None,
                 ):
+        self.set_id(id)
         self.set_CPF(CPF)
         self.set_nome(nome)
         self.set_endereco(endereco)
         self.set_telefone(telefone)
 
-
+    def set_id(self, id:int):
+        self.id = id
 
     def set_CPF(self, CPF:str):
         self.CPF = CPF
@@ -25,6 +27,8 @@ class Cliente:
     def set_telefone(self, telefone:str):
         self.telefone = telefone
 
+    def get_id(self) -> int:
+        return id
 
     def get_CPF(self) -> str:
         return self.CPF

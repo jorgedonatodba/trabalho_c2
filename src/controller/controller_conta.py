@@ -29,7 +29,7 @@ class Controller_Conta:
 
             for i in range(df_cliente.index.size):
                 # Cria um novo objeto Cliente
-                ncliente = Cliente(df_cliente.id.values[i], df_cliente.nome.values[i], df_cliente.cpf.values[i], df_cliente.endereco.values[i], df_cliente.telefone.values[i])
+                ncliente = Cliente(df_cliente.id.values[i], df_cliente.cpf.values[i], df_cliente.nome.values[i], df_cliente.endereco.values[i], df_cliente.telefone.values[i])
                 # Exibe os atributos do novo cliente
                 print(ncliente.to_string())
 
@@ -41,9 +41,9 @@ class Controller_Conta:
             # Insere e persiste o novo conta
             oracle.write(f"insert into contas values (seq_contas_id.nextval, '{nconta}', '{tipo}', '{saldo}', '{limite}', {codcli})")
             # Recupera os dados do novo conta criado transformando em um DataFrame
-            df_conta = oracle.sqlToDataFrame(f"select numero,tipo,saldo, limite from contas where numero = '{nconta}'")
+            df_conta = oracle.sqlToDataFrame(f"select id,numero,tipo,saldo, limite from contas where numero = '{nconta}'")
             # Cria um novo objeto conta
-            nova_conta = Conta(df_conta.numero.values[0], df_conta.tipo.values[0], df_conta.saldo.values[0], df_conta.limite.values[0])
+            nova_conta = Conta(df_conta.id.values[0], df_conta.numero.values[0], df_conta.tipo.values[0], df_conta.saldo.values[0], df_conta.limite.values[0])
             # Exibe os atributos do novo conta
             print(nova_conta.to_string())
             # Retorna o objeto novo_conta para utilização posterior, caso necessário
