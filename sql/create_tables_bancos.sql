@@ -42,7 +42,7 @@ CREATE TABLE contas (
   saldo NUMBER(10,2) NOT NULL,
   limite NUMBER(10,2) NOT NULL,
   id_cliente NUMBER NOT NULL,
-  CONSTRAINT contas_PK PRIMARY KEY (numero),
+  CONSTRAINT contas_PK PRIMARY KEY (id),
   CONSTRAINT contas_fk FOREIGN KEY (id_cliente) REFERENCES clientes(id)
 );
 
